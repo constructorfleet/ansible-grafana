@@ -1,0 +1,24 @@
+---
+- name: Grafana Server
+  hosts: grafana
+  become: True
+  tasks:
+    - import_role:
+        name: common
+    - import_role:
+        name: openldap
+    - import_role:
+        name: ceph-fs
+      when:
+        - shared_storage
+        - storage_backend == "cephfs"
+    - import_role:
+        name: nfs
+      when:
+        - shared_storage
+        - storage_backend == "nfs"
+    - import_role:
+        name: grafana
+    - import_role:
+        name: telegraf
+      when: "'telegraf' in group_names"

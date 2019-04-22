@@ -1,0 +1,27 @@
+---
+- name: Set configuration directory path
+  file:
+    path: "{{ grafana_configuration_dir }}"
+    state: directory
+
+- name: Set templatized Grafana configuration
+  template: 
+    src: etc/grafana/grafana.ini.j2 
+    dest: "{{ grafana_configuration_dir }}/grafana.ini"
+    force: yes
+    backup: yes
+    owner: grafana
+    group: grafana
+    mode: 0744
+  when: grafana_template_configuration
+
+- name: Set Grafana LDAP configuration
+  template: 
+    src: etc/grafana/ldap.toml.j2 
+    dest: "{{ grafana_configuration_dir }}/ldap.toml"
+    force: yes
+    backup: yes
+    owner: grafana
+    group: grafana
+    mode: 0744
+  when: grafana_enable_ldap

@@ -1,0 +1,12 @@
+---
+grafana_enable_backups: True
+grafana_enable_ldap: True
+grafana_data_dir: /var/lib/grafana
+grafana_http_protocol: http
+grafana_http_port: 3000
+grafana_root_url:
+grafana_enable_gzip: True
+grafana_cert_file: 
+grafana_cert_key: 
+grafana_configuration_dir: /etc/grafana
+grafana_template_configuration: True
