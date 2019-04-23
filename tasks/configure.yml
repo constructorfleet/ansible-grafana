@@ -25,5 +25,5 @@
     owner: grafana
     group: grafana
     mode: 0744
-  when: grafana_enable_ldap
+  when: grafana_enable_auth_ldap
   notify: restart grafana-server
