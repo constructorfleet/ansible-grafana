@@ -1,11 +1,21 @@
 ---
 
+- name: Ensure Git is installed
+  package:
+    name: git
+    state: present
+
+- name: Ensure Crond is installed
+  package:
+    name: cron
+    state: present
+
 - name: Install requirements for grafana backup tool
   pip:
     executable: pip
     name: requests
     state: present
-    
+
 - name: Create backup data directory
   file:
     path: "{{ grafana_backup_dir }}"
@@ -32,7 +42,7 @@
     mode: 0755
 
 - name: Set up grafana backup shell script from template
-  template: 
+  template:
     src: backup_grafana.sh.j2
     dest: "{{ grafana_backup_tool_dir }}/backup_grafana.sh"
     force: yes
