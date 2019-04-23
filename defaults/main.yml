@@ -3,11 +3,13 @@ grafana_install_from_repo: True
 grafana_install_release: stable
 grafana_install_verion: 5.4.2
 grafana_template_configuration: True
-grafana_enable_auth_ldap: True
+grafana_enable_auth_ldap: False
 grafana_enable_auth_google: False
 grafana_enable_auth_basic: False
 grafana_enable_auth_github: False
 grafana_enable_auth_oauth: False
+grafana_enable_auth_grafana: False
+grafana_enable_auth_proxy: False
 grafana_enable_auth_anonymous: False
 grafana_data_dir: /var/lib/grafana
 grafana_configuration_dir: /etc/grafana
@@ -19,7 +21,7 @@ grafana_root_url:
 grafana_enable_gzip: True
 grafana_cert_file: 
 grafana_cert_key: 
-
+grafana_url:
 
 grafana_enable_backups: True
 grafana_backup_dir: /data/backups/grafana
