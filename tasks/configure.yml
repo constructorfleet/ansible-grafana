@@ -14,6 +14,7 @@
     group: grafana
     mode: 0744
   when: grafana_template_configuration
+  notify: restart grafana-server
 
 - name: Set Grafana LDAP configuration
   template: 
@@ -25,3 +26,4 @@
     group: grafana
     mode: 0744
   when: grafana_enable_ldap
+  notify: restart grafana-server
