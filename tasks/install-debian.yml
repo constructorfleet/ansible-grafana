@@ -1,28 +1,42 @@
 ---
 - name: Install any necessary dependencies [Debian/Ubuntu]
-  apt: 
+  apt:
     name: "{{ item }}" 
     state: present 
     update_cache: yes 
     cache_valid_time: 3600
-  with_items:
-    - python-httplib2
-    - python-apt
-    - curl
-    - apt-transport-https
-    
+  with_items: "{{ grafana_prereq_pkgs }}"
+  when: not grafana_install_from_repo
+
+- name: Download Grafana package via URL [Debian/Ubuntu]
+  command: curl -o /tmp/grafana-ansible-download.deb {{ grafana_install_url }}
+  when: not grafana_install_from_repo
+
+- name: Install downloaded Grafana package [Debian/Ubuntu]
+  apt:
+    deb: /tmp/grafana-ansible-download.deb
+    state: present
+  when: not grafana_install_from_repo
+
+- name: Install APT HTTPS Transport [Debian/Ubuntu]
+  apt:
+    name: apt-transport-https
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+  when: grafana_install_from_repo
 
 - name: Import Grafana GPG signing key [Debian/Ubuntu]
   apt_key:
-    url: https://repos.influxdata.com/grafana.key
+    url: https://packages.grafana.com/gpg.key
     state: present
-  when: grafana_install_url is not defined or grafana_install_url == None
+  when: grafana_install_from_repo
 
 - name: Add Grafana repository [Debian/Ubuntu]
   apt_repository:
-    repo: deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ grafana_install_version }}
+    repo: deb https://packages.grafana.com/oss/deb {{ grafana_install_release | default('stable') }} main
     state: present
-  when: grafana_install_url is not defined or grafana_install_url == None
+  when: grafana_install_from_repo
 
 - name: Install Grafana packages [Debian/Ubuntu]
   apt: 
@@ -30,21 +44,11 @@
     state: latest
     update_cache: yes
     cache_valid_time: 3600
-  when: grafana_install_url is not defined or grafana_install_url == None
+  when: grafana_install_from_repo
   
-- name: Download Grafana package via URL [Debian/Ubuntu]
-  command: curl -o /tmp/grafana-ansible-download.deb {{ grafana_install_url }}
-  when: grafana_install_url is defined and grafana_install_url != None
-
-- name: Install downloaded Grafana package [Debian/Ubuntu]
-  apt:
-    deb: /tmp/grafana-ansible-download.deb
-    state: present
-  when: grafana_install_url is defined and grafana_install_url != None
-
 - name: Register, Enable, and Start Grafana service
   systemd:
-    name: grafana
+    name: grafana-server
     state: started
     enabled: yes
     daemon_reload: yes
