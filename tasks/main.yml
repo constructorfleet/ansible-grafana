@@ -1,6 +1,6 @@
 ---
-#- include_tasks: install.yml
-#  tags: [grafana, install]
+- include_tasks: install.yml
+  tags: [grafana, install]
 
 - include_tasks: configure.yml
   tags: [grafana, configure]
