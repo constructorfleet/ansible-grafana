@@ -5,8 +5,8 @@
     state: directory
 
 - name: Set templatized Grafana configuration
-  template: 
-    src: etc/grafana/grafana.ini.j2 
+  template:
+    src: etc/grafana/grafana.ini.j2
     dest: "{{ grafana_configuration_dir }}/grafana.ini"
     force: yes
     backup: yes
@@ -17,8 +17,8 @@
   notify: restart grafana-server
 
 - name: Set Grafana LDAP configuration
-  template: 
-    src: etc/grafana/ldap.toml.j2 
+  template:
+    src: etc/grafana/ldap.toml.j2
     dest: "{{ grafana_configuration_dir }}/ldap.toml"
     force: yes
     backup: yes
