@@ -1,6 +1,10 @@
 ---
-grafana_pkgs:
-grafana_py2_pkgs:
-grafana_py3_pkgs:
+grafana_prereq_pkgs:
+  - libfontconfig1
+  - adduser
 
-grafana_install_url:
+grafana_install_url: "https://dl.grafana.com/oss/release/grafana_{{ grafana_install_version }}_amd64.deb"
+
+grafana_py2_pkgs:
+
+grafana_py3_pkgs:
