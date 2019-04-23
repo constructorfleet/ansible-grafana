@@ -4,3 +4,7 @@
 
 - include_tasks: configure.yml
   tags: [grafana, configure]
+
+- include_tasks: backup.yml
+  when: grafana_enable_backups
+  tags: [grafana, backup]
