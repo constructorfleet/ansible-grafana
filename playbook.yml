@@ -1,6 +1,6 @@
 ---
 - name: Grafana Server
-  hosts: grafana
+  hosts: localhost
   become: True
   tasks:
     - import_role:
