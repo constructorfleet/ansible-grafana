@@ -11,8 +11,10 @@
 
 #################################### Paths ####################################
 [paths]
-# Path to where grafana can store temp files, sessions, and the sqlite3 db (if that is used)
-;data = /var/lib/grafana
+
+{% if grafana_data_dir exists and grafana_data_dir != None %}
+data = {{ grafana_data_dir }}
+{% endif %}
 
 # Temporary files in `data` directory older than given duration will be removed
 ;temp_data_lifetime = 24h
@@ -28,25 +30,29 @@
 
 #################################### Server ####################################
 [server]
-# Protocol (http, https, socket)
-;protocol = http
+{% if grafana_http_protocol exists and grafana_http_protocol != None %}
+protocol = {{ grafana_http_protocol | default('http') }}
+{% endif %}
 
-# The ip address to bind to, empty will bind to all interfaces
-;http_addr =
+{% if grafana_http_addr exists and grafana_http_addr != None %}
+http_addr = {{ grafana_http_addr | default('0.0.0.0') }}
+{% endif %}
 
-# The http port  to use
-;http_port = 3000
+{% if grafana_http_port exists and grafana_http_port != None %}
+http_port = {{ grafana_http_port | default('3000') }}
+{% endif %}
 
-# The public facing domain name used to access grafana from a browser
-;domain = localhost
+{% if grafana_domain exists and grafana_domain != None %}
+domain = {{ grafana_domain | default('localhost') }}
+{% endif %}
 
 # Redirect to correct domain if host header does not match domain
 # Prevents DNS rebinding attacks
 ;enforce_domain = false
 
-# The full public facing url you use in browser, used for redirects and emails
-# If you use reverse proxy and sub path specify full url (with sub path)
-;root_url = http://localhost:3000
+{% if grafana_root_url exists and grafana_root_url != None %}
+root_url = {{ grafana_root_url }}
+{% endif %}
 
 # Log web requests
 ;router_logging = false
@@ -54,12 +60,17 @@
 # the path relative working path
 ;static_root_path = public
 
-# enable gzip
-;enable_gzip = false
+{% if grafana_enable_gzip %}
+enable_gzip = true
+{% endif %}
 
-# https certs & key file
-;cert_file =
-;cert_key =
+{% if grafana_root_url exists and grafana_root_url != None %}
+cert_file = {{ grafana_cert_file }}
+{% endif %}
+
+{% if grafana_root_url exists and grafana_root_url != None %}
+cert_key = {{ grafana_cert_key }}
+{% endif %}
 
 # Unix socket path
 ;socket =
@@ -228,6 +239,7 @@ log_queries =
 ;oauth_auto_login = false
 
 #################################### Anonymous Auth ##########################
+{% if grafana_enable_auth_anonymous %}
 [auth.anonymous]
 # enable anonymous access
 ;enabled = false
@@ -237,8 +249,9 @@ log_queries =
 
 # specify role for unauthenticated users
 ;org_role = Viewer
-
+{% endif %}
 #################################### Github Auth ##########################
+{% if grafana_enable_auth_github %}
 [auth.github]
 ;enabled = false
 ;allow_sign_up = true
@@ -250,8 +263,9 @@ log_queries =
 ;api_url = https://api.github.com/user
 ;team_ids =
 ;allowed_organizations =
-
+{% endif %}
 #################################### Google Auth ##########################
+{% if grafana_enable_auth_google %}
 [auth.google]
 ;enabled = false
 ;allow_sign_up = true
@@ -262,8 +276,9 @@ log_queries =
 ;token_url = https://accounts.google.com/o/oauth2/token
 ;api_url = https://www.googleapis.com/oauth2/v1/userinfo
 ;allowed_domains =
-
+{% endif %}
 #################################### Generic OAuth ##########################
+{% if grafana_enable_auth_oauth %}
 [auth.generic_oauth]
 ;enabled = false
 ;name = OAuth
@@ -280,8 +295,9 @@ log_queries =
 ;tls_client_cert =
 ;tls_client_key =
 ;tls_client_ca =
-
+{% endif %}
 #################################### Grafana.com Auth ####################
+{% if grafana_enable_auth_grafana %}
 [auth.grafana_com]
 ;enabled = false
 ;allow_sign_up = true
@@ -289,8 +305,9 @@ log_queries =
 ;client_secret = some_secret
 ;scopes = user:email
 ;allowed_organizations =
-
+{% endif %}
 #################################### Auth Proxy ##########################
+{% if grafana_enable_auth_proxy %}
 [auth.proxy]
 ;enabled = false
 ;header_name = X-WEBAUTH-USER
@@ -299,16 +316,19 @@ log_queries =
 ;ldap_sync_ttl = 60
 ;whitelist = 192.168.1.1, 192.168.2.1
 ;headers = Email:X-User-Email, Name:X-User-Name
-
+{% endif %}
 #################################### Basic Auth ##########################
+{% if grafana_enable_auth_basic %}
 [auth.basic]
 ;enabled = true
-
+{% endif %}
 #################################### Auth LDAP ##########################
+{% if grafana_enable_auth_ldap %}
 [auth.ldap]
 enabled = true
-config_file = /etc/grafana/ldap.toml
+config_file = {{ grafana_configuration_dir | default('/etc/grafana') }}/ldap.toml
 allow_sign_up = true
+{% endif %}
 
 #################################### SMTP / Emailing ##########################
 [smtp]
