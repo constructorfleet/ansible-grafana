@@ -19,11 +19,12 @@
     repo: "https://github.com/constructorfleet/grafana-backup-tool.git"
     version: master
     dest: "{{ grafana_backup_tool_dir }}"
+    force: yes
 
 - name: Set up grafana backup python script from template
   template:
     src: grafanaSettings.py.j2
-    dest: "{{ grafana_backup_tool_dir }}/grafanaSettings.py}}"
+    dest: "{{ grafana_backup_tool_dir }}/grafanaSettings.py"
     force: yes
     backup: no
     owner: grafana
@@ -32,8 +33,8 @@
 
 - name: Set up grafana backup shell script from template
   template: 
-    src: backup_gafana.sh.j2
-    dest: "{{ grafana_backup_tool_dir }}/backup_grafana.sh }}"
+    src: backup_grafana.sh.j2
+    dest: "{{ grafana_backup_tool_dir }}/backup_grafana.sh"
     force: yes
     backup: no
     owner: grafana
@@ -46,5 +47,5 @@
     minute: 0
     hour: 0
     user: grafana
-    job: "{{ grafana_backup_tool_dir }}/backup_grafana.sh && find {{ grafana_backup_dir }}/ -ctime +3 -exec rm -f {} \;"
+    job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh && find {{ grafana_backup_dir }}/ -mtime 3 -exec rm -f {} \;'
     cron_file: ansible-grafana_backup
