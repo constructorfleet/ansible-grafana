@@ -27,3 +27,16 @@
     mode: 0744
   when: grafana_enable_auth_ldap
   notify: restart grafana-server
+
+- name: Install grafana plugins
+  grafana_plugin:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - briangann-gauge-panel
+    - grafana-polystat-panel
+    - grafana-piechart-panel
+    - ntop-ntopng-datasource
+    - vonage-status-panel
+    - grafana-worldmap-panel
+  notify: restart grafana-server
