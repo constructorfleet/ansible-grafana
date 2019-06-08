@@ -242,13 +242,13 @@ log_queries =
 {% if grafana_enable_auth_anonymous %}
 [auth.anonymous]
 # enable anonymous access
-;enabled = false
+enabled = true
 
 # specify organization name that should be used for unauthenticated users
-;org_name = Main Org.
+org_name = Main Org.
 
 # specify role for unauthenticated users
-;org_role = Viewer
+org_role = Viewer
 {% endif %}
 #################################### Github Auth ##########################
 {% if grafana_enable_auth_github %}
@@ -327,7 +327,7 @@ log_queries =
 [auth.ldap]
 enabled = true
 config_file = {{ grafana_configuration_dir | default('/etc/grafana') }}/ldap.toml
-allow_sign_up = true
+allow_sign_up = false
 {% endif %}
 
 #################################### SMTP / Emailing ##########################
