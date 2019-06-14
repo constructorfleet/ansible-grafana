@@ -332,18 +332,36 @@ allow_sign_up = false
 
 #################################### SMTP / Emailing ##########################
 [smtp]
-;enabled = false
-;host = localhost:25
-;user =
-# If the password contains # or ; you have to wrap it with trippel quotes. Ex """#password;"""
-;password =
-;cert_file =
-;key_file =
-;skip_verify = false
-;from_address = admin@grafana.localhost
-;from_name = Grafana
-# EHLO identity in SMTP dialog (defaults to instance_name)
-;ehlo_identity = dashboard.example.com
+{% if grafana_enable_smtp %}
+enabled = true
+host = {{ grafana_smtp_host | default('localhost') }}:{{ grafana_smtp_port | default('25') }}
+user = {{ grafana_smtp_user | default('') }}
+password = """{{ grafana_smtp_password | default('') }}"""
+
+{% if grafana_smtp_cert_file is defined and grafana_smtp_cert_file != '' %}
+cert_file = {{ grafana_smtp_cert_file }}
+{% endif %}
+
+{% if grafana_smtp_key_file is defined and grafana_smtp_key_file != '' %}
+key_file = {{ grafana_smtp_key_file }}
+{% endif %}
+
+{% if grafana_smtp_skip_verify %}
+skip_verify = true
+{% else %}
+skip_verify = false
+{% endif %}
+
+from_address = {{ grafana_smtp_from_address | default('admin@grafana') }}
+from_name = {{ grafana_smtp_from_name | default('Grafana Admin') }}
+
+{% if grafana_smtp_ehlo_identity is defined and grafana_smtp_ehlo_identity != '' %}
+ehlo_identity = {{ grafana_smtp_ehlo_identity }}
+{% endif %}
+
+{% else %}
+enabled = false
+{% endif %}
 
 [emails]
 ;welcome_email_on_sign_up = false

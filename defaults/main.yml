@@ -31,6 +31,18 @@ grafana_backup_dir: "{{ data_mount_root }}/{{ backup_directory }}/grafana"
 grafana_backup_tool_dir: /usr/local/src/grafana-backup-tool
 grafana_api_token:
 
+grafana_enable_smtp: False
+grafana_smtp_host:
+grafana_smtp_port:
+grafana_smtp_user:
+grafana_smtp_password:
+grafana_smtp_cert_file:
+grafana_smtp_key_file:
+grafana_smtp_skip_verify: False
+grafana_smtp_from_address:
+grafana_smtp_from_name:
+grafana_smtp_ehlo_identity:
+
 
 # OpenLDAP Variables (usually already defined in group_vars when using openldap role)
 
