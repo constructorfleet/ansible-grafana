@@ -23,8 +23,6 @@ grafana_http_port: 3000
 grafana_domain:
 grafana_root_url:
 grafana_enable_gzip: True
-grafana_cert_key: "{{ ssl_private_key | default('') }}"
-grafana_cert_file: "{{ ssl_certificate | default('') }}"
 grafana_url: http://localhost:3000
 grafana_enable_backups: True
 grafana_backup_dir: "{{ data_mount_root }}/{{ backup_directory }}/grafana"
@@ -49,3 +47,9 @@ grafana_smtp_ehlo_identity:
 openldap_server_ip:
 openldap_server_rootpw: "{{ vault_openldap_server_rootpw }}"
 openldap_server_enable_ssl: false
+
+grafana_enable_ssl: False
+ssl_certpath:
+ssl_keypath:
+ssl_privkey:
+ssl_certchain:

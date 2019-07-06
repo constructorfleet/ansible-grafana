@@ -64,12 +64,9 @@ root_url = {{ grafana_root_url }}
 enable_gzip = true
 {% endif %}
 
-{% if grafana_cert_file is defined and grafana_cert_file != None %}
-cert_file = {{ grafana_cert_file }}
-{% endif %}
-
-{% if grafana_cert_key is defined and grafana_cert_key != None %}
-cert_key = {{ grafana_cert_key }}
+{% if grafana_enable_ssl %}
+cert_file = {{ ssl_certpath }}
+cert_key = {{ ssl_keypath }}
 {% endif %}
 
 # Unix socket path
