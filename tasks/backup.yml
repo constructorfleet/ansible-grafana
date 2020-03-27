@@ -57,5 +57,5 @@
     minute: 0
     hour: 0
     user: grafana
-    job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh && find {{ grafana_backup_dir }}/ -mtime 3 -exec rm -f {} \;'
+    job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh && find {{ grafana_backup_dir }}/ -mtime +3 -exec rm -f {} \;'
     cron_file: ansible-grafana_backup
