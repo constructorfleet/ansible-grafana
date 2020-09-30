@@ -1,10 +1,10 @@
 ---
-- include_tasks: install.yml
-  tags: [grafana, install]
+- import_tasks: install.yml
+  tags: [grafana, grafana-install]
 
-- include_tasks: configure.yml
-  tags: [grafana, configure]
+- import_tasks: configure.yml
+  tags: [grafana, grfana-configure]
 
-- include_tasks: backup.yml
+- import_tasks: backup.yml
   when: grafana_enable_backups
-  tags: [grafana, backup]
+  tags: [grafana, grafana-backup]
