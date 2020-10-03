@@ -77,7 +77,7 @@ echo grafana_backup_${current_time} archive successful, safe to rm $backup_tmp_d
 rm -r $backup_tmp_dir/grafana_backup_${current_time}
 else
 # exit if tar exited with an error
-echo rm -r $backup_tmp_dir/grafana_backup_${current_time} failed to archive, we will leave the uncompressed backup in place
+echo $backup_tmp_dir/grafana_backup_${current_time} failed to archive, we will leave the uncompressed backup in place
 fi
 
 echo
