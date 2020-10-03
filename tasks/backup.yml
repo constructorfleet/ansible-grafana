@@ -48,7 +48,7 @@
     - grafana-backup
     - grafana-backup-repo
 
-- name: Set up grafana backup python script from template
+- name: Update grafana backup script settings config from template
   template:
     src: grafanaSettings.py.j2
     dest: "{{ grafana_backup_tool_dir }}/grafanaSettings.py"
@@ -60,7 +60,7 @@
   tags:
     - grafana-backup-settings
     - grafana-backup
-- name: Set up grafana backup shell script from template
+- name: Update grafana backup script from template
   template:
     src: backup_grafana.sh.j2
     dest: "{{ grafana_backup_tool_dir }}/backup_grafana.sh"
@@ -75,8 +75,8 @@
 - name: Creates Grafana backup Cron job
   cron:
     name: "grafana create backup"
-    minute: 0
-    hour: 0
+    minute: '0'
+    hour: '0'
     user: grafana
     job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh && find {{ grafana_backup_archive_dir }}/ -mtime +3 -exec rm -f {} \;'
     cron_file: ansible-grafana_backup
