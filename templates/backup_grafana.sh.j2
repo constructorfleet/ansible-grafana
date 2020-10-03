@@ -11,8 +11,6 @@ backup_archive_dir="{{ grafana_backup_archive_dir }}"
 backup_dir={{ grafana_backup_tmp_dir | default('/opt/backups/grafana') }}/{{ grafana_backup_tmp_folder|default('grafana_backup_${current_time}') }}
 backup_tmp_dir={{ grafana_backup_tmp_dir }}
 
-backup_archive=$backup_dir.tar.gz
-
 dashboard_backup_path="$backup_dir/dashboards"
 datasource_backup_path="$backup_dir/datasources"
 folders_backup_path="$backup_dir/folders"
@@ -27,10 +25,10 @@ echo
 sleep 3
 
 echo -e "
-  Backing up the following features:
-    - dashboards: $dashboard_backup_path
-    - datasources: $datasource_backup_path
-    - folders: $folders_backup_path
+Backing up the following features:
+- dashboards: $dashboard_backup_path
+- datasources: $datasource_backup_path
+- folders: $folders_backup_path
 "
 
 echo "Creating directories"
@@ -62,7 +60,7 @@ python "${current_path}/saveDatasources.py" $datasource_backup_path || exit 0
 echo
 echo "Backing up Grafana Folders"
 echo
-python "${current_path}/saveFolders.py" $folders_backup_path || exit 0f
+python "${current_path}/saveFolders.py" $folders_backup_path || exit 0
 
 # wait for grafana backup cleanup tasks to complete
 sleep 60
@@ -73,11 +71,19 @@ tar -czvpf $backup_archive_dir/grafana_backup_${current_time}.tgz grafana_backup
 
 # check exit code of tar command and remove old directories if we exited successfully
 if [[ $? -eq 0 ]]; then
-echo grafana_backup_${current_time} archive successful, safe to rm $backup_tmp_dir/grafana_backup_${current_time}
+echo -e "grafana_backup_${current_time} archive successful, verifying"
+stat $backup_archive_dir/grafana_backup_${current_time}.tgz
+if [[ $? -eq 0 ]]; then
+echo -e "backup archive $backup_archive_dir/grafana_backup_${current_time}.tgz exists"
+else
+echo -e "backup archive $backup_archive_dir/grafana_backup_${current_time}.tgz not found, exiting"
+exit 1
+fi
+echo -e "removing $backup_tmp_dir/grafana_backup_${current_time}"
 rm -r $backup_tmp_dir/grafana_backup_${current_time}
 else
 # exit if tar exited with an error
-echo $backup_tmp_dir/grafana_backup_${current_time} failed to archive, we will leave the uncompressed backup in place
+echo -e "$backup_tmp_dir/grafana_backup_${current_time} failed to archive, we will leave the uncompressed backup in place"
 fi
 
 echo

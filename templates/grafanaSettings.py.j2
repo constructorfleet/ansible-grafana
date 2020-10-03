@@ -4,6 +4,6 @@ grafana_url = os.getenv('GRAFANA_URL', '{{ grafana_url | default('http://localho
 token = os.getenv('GRAFANA_TOKEN', '{{ grafana_api_token | default('') }}')
 http_get_headers = {'Authorization': 'Bearer ' + token}
 http_post_headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
-search_api_limit = 100000
+search_api_limit = 5000
 debug = False
 verifySSL = False
