@@ -196,10 +196,10 @@ log_queries =
 #################################### Users ###############################
 [users]
 # disable user signup / registration
-;allow_sign_up = true
+allow_sign_up = false
 
 # Allow non admin users to create organizations
-;allow_org_create = true
+allow_org_create = false
 
 # Set to true to automatically assign new users to the default organization (id 1)
 ;auto_assign_org = true
@@ -211,7 +211,7 @@ log_queries =
 ;login_hint = email or username
 
 # Default UI theme ("dark" or "light")
-;default_theme = dark
+default_theme = dark
 
 # External user management, these options affect the organization users view
 ;external_manage_link_url =
@@ -219,7 +219,7 @@ log_queries =
 ;external_manage_info =
 
 # Viewers can edit/inspect dashboard settings in the browser. But not save the dashboard.
-;viewers_can_edit = false
+viewers_can_edit = false
 
 [auth]
 # Set to true to disable (hide) the login form, useful if you use OAuth, defaults to false
