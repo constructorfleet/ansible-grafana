@@ -78,39 +78,118 @@ cert_key = {{ ssl_keypath }}
 # as separate properties or as on string using the url properties.
 
 # Either "mysql", "postgres" or "sqlite3", it's your choice
-;type = sqlite3
-;host = 127.0.0.1:3306
-;name = grafana
-;user = root
+{% if grafana_database_type != None  %}
+type = "{{ grafana_database_type|default('sqlite3') }}"
+{% endif %}
+{% if grafana_database_host != None %}
+host = "{{ grafana_database_host }}"
+{% else %}
+;host
+{% endif %}
+{% if grafana_database_name != None %}
+name = "{{ grafana_database_name|default('grafana') }}"
+{% endif %}
+{% if grafana_database_user != None %}
+user = "{{ grafana_database_user }}"
+{% else %}
+;user
+{% endif %}
 # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
-;password =
+{% if grafana_database_user_password != None %}
+password = {{ grafana_database_user_password }}
+{% else %}
+;password
+{% endif %}
 
 # Use either URL or the previous fields to configure the database
 # Example: mysql://user:secret@host:port/database
-;url =
+{% if grafana_database_full_url != None %}
+url = {{ grafana_database_full_url }}
+{% else %}
+;url
+{% endif %}
+
 
 # For "postgres" only, either "disable", "require" or "verify-full"
-;ssl_mode = disable
+{% if grafana_database_type == 'postgres'  %}
+ssl_mode = {{ grafana_postgres_ssl_mode|default('disable') }}
+{% endif %}
+{% if grafana_postgres_ssl_mode|default('disable') != 'disable' %}
+{% if grafana_postgres_ca_cert_path != None %}
+ca_cert_path = {{ grafana_postgres_ca_cert_path }}
+{% else %}
+;ca_cert_path =
+{% endif %}
+{% if grafana_postgres_client_key_path != None %}
+ca_cert_path = {{ grafana_postgres_client_key_path }}
+{% else %}
+;client_key_path =
+{% endif %}
+{% if grafana_postgres_client_cert_path != None %}
+ca_cert_path = {{ grafana_postgres_client_cert_path }}
+{% else %}
+;client_cert_path =
+{% endif %}
+{% if grafana_postgres_client_cert_name != None %}
+ca_cert_path = {{ grafana_postgres_client_cert_name }}
+{% else %}
+;server_cert_name =
+{% endif %}
+{% endif %}
 
 # For "sqlite3" only, path relative to data_path setting
-;path = grafana.db
+{% if grafana_database_type == 'sqlite3'  %}
+path = {{ grafana_sqlite_database_path|default('grafana.db') }}
+{% endif %}
 
 # Max idle conn setting default is 2
-;max_idle_conn = 2
+max_idle_conn = {{ grafana_database_max_idle_conn|default('2') }}
 
 # Max conn setting default is 0 (mean not set)
-;max_open_conn =
+max_open_conn = {{ grafana_database_max_open_conn|default('150') }}
 
 # Connection Max Lifetime default is 14400 (means 14400 seconds or 4 hours)
 ;conn_max_lifetime = 14400
 
 # Set to true to log the sql calls and execution times.
-log_queries =
+log_queries = true
+
+# For "sqlite3" only. cache mode setting used for connecting to the database. (private, shared)
+{% if grafana_database_type == 'sqlite3'  %}
+{% if grafana_sqlite_cache_mode != None %}
+cache_mode = {{ grafana_sqlite_cache_mode|default('private') }}
+{% endif %}
+{% endif %}
+
+################################### Data sources #########################
+[datasources]
+# Upper limit of data sources that Grafana will return. This limit is a temporary configuration and it will be deprecated when pagination will be introduced on the list data sources API.
+datasource_limit = 5000
+
+#################################### Remote Cache ####################################
+
+[remote_cache]
+{% if grafana_remote_cache != None %}
+type = {{ grafana_remote_cache|default('database') }}
+# Either "redis", "memcached" or "database" default is "database"
+{% endif %}
+
+# cache connectionstring options
+# database: will use Grafana primary database.
+# redis: config like redis server e.g. `addr=127.0.0.1:6379,pool_size=100,db=0,ssl=false`. Only addr is required. ssl may be 'true', 'false', or 'insecure'.
+# memcache: 127.0.0.1:11211
+{% if grafana_remote_cache != 'database' %}
+connstr = {{ grafana_cache_connstr }}
+{% else %}
+;connstr =
+{% endif %}
 
 #################################### Session ####################################
 [session]
 # Either "memory", "file", "redis", "mysql", "postgres", default is "file"
-;provider = file
+{% if grafana_session_provider != None %}
+provider = {{ grafana_session_provider|default('file') }}
+{% endif %}
 
 # Provider config options
 # memory: not have any config yet
@@ -118,16 +197,20 @@ log_queries =
 # redis: config like redis server e.g. `addr=127.0.0.1:6379,pool_size=100,db=grafana`
 # mysql: go-sql-driver/mysql dsn config string, e.g. `user:password@tcp(127.0.0.1:3306)/database_name`
 # postgres: user=a password=b host=localhost port=5432 dbname=c sslmode=disable
-;provider_config = sessions
+{% if grafana_provider_config != None %}
+provider_config = {{ grafana_provider_config }}
+{% else %}
+;provider_config =
+{% endif %}
 
 # Session cookie name
-;cookie_name = grafana_sess
+cookie_name = grafana_sess
 
 # If you use session in https only, default is false
-;cookie_secure = false
+cookie_secure = false
 
 # Session life time, default is 86400
-;session_life_time = 86400
+session_life_time = 86400
 
 #################################### Data proxy ###########################
 [dataproxy]
@@ -156,10 +239,10 @@ log_queries =
 #################################### Security ####################################
 [security]
 # default admin user, created on startup
-;admin_user = admin
+admin_user = admin
 
 # default admin password, can be changed before first start of grafana,  or in profile settings
-;admin_password = admin
+admin_password = admin
 
 # used for signing
 ;secret_key = SW2YcwTIb9zpOOhoPsMm
@@ -191,7 +274,7 @@ log_queries =
 #################################### Dashboards History ##################
 [dashboards]
 # Number dashboard versions to keep (per dashboard). Default: 20, Minimum: 1
-;versions_to_keep = 20
+versions_to_keep = 50
 
 #################################### Users ###############################
 [users]
@@ -202,7 +285,7 @@ allow_sign_up = false
 allow_org_create = false
 
 # Set to true to automatically assign new users to the default organization (id 1)
-;auto_assign_org = true
+auto_assign_org = true
 
 # Default role new users will be automatically assigned (if disabled above is set to true)
 ;auto_assign_org_role = Viewer
