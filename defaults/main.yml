@@ -1,6 +1,7 @@
 ---
 data_mount_root: "/data"
-
+grafana_app_mode: production
+grafana_containerized: False
 grafana_install_from_repo: True
 grafana_install_release: stable
 grafana_install_verion: 7.5.3
@@ -15,6 +16,8 @@ grafana_enable_auth_proxy: False
 grafana_enable_auth_anonymous: False
 grafana_data_dir: /var/lib/grafana
 grafana_log_path: /var/log/grafana
+grafana_database_log_queries: False
+grafana_database_conn_max_lifetime: 14400
 grafana_database_host:
 grafana_database_type: sqlite3
 grafana_database_user:
@@ -28,6 +31,7 @@ grafana_postgres_client_cert_name:
 grafana_sqlite_database_path:
 grafana_database_max_idle_conn: 2
 grafana_database_max_open_conn: 150
+grafana_datasource_limit: 5000
 grafana_configuration_dir: /etc/grafana
 grafana_http_protocol: http
 grafana_http_addr: 0.0.0.0
@@ -46,6 +50,7 @@ grafana_provider_config:
 grafana_session_provider:
 grafana_backup_tool_dir: /usr/local/src/grafana-backup-tool
 grafana_api_token:
+grafana_enable_ssl: False
 grafana_config_uid: 472
 grafana_config_gid: 472
 grafana_enable_smtp: False
