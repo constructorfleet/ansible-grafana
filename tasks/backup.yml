@@ -22,8 +22,8 @@
   file:
     path: "{{ grafana_backup_tmp_dir }}"
     state: directory
-    owner: grafana
-    group: grafana
+    owner: root
+    group: root
     mode: 0755
   tags:
     - grafana-backup
@@ -32,8 +32,8 @@
   file:
     path: "{{ grafana_backup_archive_dir }}"
     state: directory
-    owner: grafana
-    group: grafana
+    owner: root
+    group: root
     mode: 0755
   tags:
     - grafana-backup
@@ -54,8 +54,8 @@
     dest: "{{ grafana_backup_tool_dir }}/grafanaSettings.py"
     force: yes
     backup: no
-    owner: grafana
-    group: grafana
+    owner: root
+    group: root
     mode: 0755
   tags:
     - grafana-backup-settings
@@ -66,8 +66,8 @@
     dest: "{{ grafana_backup_tool_dir }}/backup_grafana.sh"
     force: yes
     backup: no
-    owner: grafana
-    group: grafana
+    owner: root
+    group: root
     mode: 0755
   tags:
     - grafana-backup
@@ -77,7 +77,7 @@
     name: "grafana create backup"
     minute: '0'
     hour: '0'
-    user: grafana
+    user: root
     job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh && find {{ grafana_backup_archive_dir }}/ -mtime +30 -exec rm -f {} \;'
     cron_file: ansible-grafana_backup
   tags:
