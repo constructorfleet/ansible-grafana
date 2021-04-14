@@ -3,6 +3,9 @@
   file:
     path: "{{ grafana_configuration_dir }}"
     state: directory
+  tags:
+    - grafana-configfile
+    - grafana-ldap
 
 - name: Set templatized Grafana configuration
   template:
@@ -10,23 +13,26 @@
     dest: "{{ grafana_configuration_dir }}/grafana.ini"
     force: yes
     backup: yes
-    owner: grafana
-    group: grafana
-    mode: 0744
+    owner: 472
+    group: 472
+    mode: 0777
   when: grafana_template_configuration
   notify: restart grafana-server
-
+  tags:
+    - grafana-configfile
 - name: Set Grafana LDAP configuration
   template:
     src: etc/grafana/ldap.toml.j2
     dest: "{{ grafana_configuration_dir }}/ldap.toml"
     force: yes
     backup: yes
-    owner: grafana
-    group: grafana
-    mode: 0744
+    owner: 472
+    group: 472
+    mode: 0777
   when: grafana_enable_auth_ldap
   notify: restart grafana-server
+  tags:
+    - grafana-ldap
 
 - name: Install grafana plugins
   grafana_plugin:
@@ -39,4 +45,7 @@
     - ntop-ntopng-datasource
     - vonage-status-panel
     - grafana-worldmap-panel
+    - petrslavotinek-carpetplot-panel
   notify: restart grafana-server
+  tags:
+    - grafana-plugins
