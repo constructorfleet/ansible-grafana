@@ -3,7 +3,7 @@
   tags: [grafana, grafana-install]
 
 - import_tasks: configure.yml
-  tags: [grafana, grfana-configure]
+  tags: [grafana, grafana-configure]
 
 - import_tasks: backup.yml
   when: grafana_enable_backups
