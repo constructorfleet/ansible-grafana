@@ -14,6 +14,7 @@ grafana_enable_auth_grafana: False
 grafana_enable_auth_proxy: False
 grafana_enable_auth_anonymous: False
 grafana_data_dir: /var/lib/grafana
+grafana_log_path: /var/log/grafana
 grafana_database_host:
 grafana_database_type: sqlite3
 grafana_database_user:
@@ -45,7 +46,8 @@ grafana_provider_config:
 grafana_session_provider:
 grafana_backup_tool_dir: /usr/local/src/grafana-backup-tool
 grafana_api_token:
-
+grafana_config_uid: 472
+grafana_config_gid: 472
 grafana_enable_smtp: False
 grafana_smtp_host:
 grafana_smtp_port:
