@@ -4,7 +4,7 @@
 # change
 
 # possible values : production, development
-;app_mode = production
+app_mode = {{ grafana_app_mode|default('production') }}
 
 # instance name, defaults to HOSTNAME environment variable value or hostname if HOSTNAME var is empty
 ;instance_name = ${HOSTNAME}
@@ -13,14 +13,14 @@
 [paths]
 
 {% if grafana_data_dir is defined and grafana_data_dir != None %}
-data = {{ grafana_data_dir }}
+data = {{ grafana_data_dir|default('/var/lib/grafana') }}
 {% endif %}
 
 # Temporary files in `data` directory older than given duration will be removed
 ;temp_data_lifetime = 24h
 
 # Directory where grafana can store logs
-;logs = /var/log/grafana
+logs = {{ grafana_log_dir|default('/var/log/grafana') }}
 
 # Directory where grafana will automatically scan and look for plugins
 ;plugins = /var/lib/grafana/plugins
@@ -30,21 +30,10 @@ data = {{ grafana_data_dir }}
 
 #################################### Server ####################################
 [server]
-{% if grafana_http_protocol is defined and grafana_http_protocol != None %}
 protocol = {{ grafana_http_protocol | default('http') }}
-{% endif %}
-
-{% if grafana_http_addr is defined and grafana_http_addr != None %}
 http_addr = {{ grafana_http_addr | default('0.0.0.0') }}
-{% endif %}
-
-{% if grafana_http_port is defined and grafana_http_port != None %}
 http_port = {{ grafana_http_port | default('3000') }}
-{% endif %}
-
-{% if grafana_domain is defined and grafana_domain != None %}
 domain = {{ grafana_domain | default('localhost') }}
-{% endif %}
 
 # Redirect to correct domain if host header does not match domain
 # Prevents DNS rebinding attacks
@@ -65,8 +54,8 @@ enable_gzip = true
 {% endif %}
 
 {% if grafana_enable_ssl %}
-cert_file = {{ ssl_certpath }}
-cert_key = {{ ssl_keypath }}
+cert_file = {{ grafana_ssl_certpath }}
+cert_key = {{ grafana_ssl_keypath }}
 {% endif %}
 
 # Unix socket path
@@ -78,9 +67,7 @@ cert_key = {{ ssl_keypath }}
 # as separate properties or as on string using the url properties.
 
 # Either "mysql", "postgres" or "sqlite3", it's your choice
-{% if grafana_database_type != None  %}
 type = "{{ grafana_database_type|default('sqlite3') }}"
-{% endif %}
 {% if grafana_database_host != None %}
 host = "{{ grafana_database_host }}"
 {% else %}
@@ -114,27 +101,29 @@ url = {{ grafana_database_full_url }}
 {% if grafana_database_type == 'postgres'  %}
 ssl_mode = {{ grafana_postgres_ssl_mode|default('disable') }}
 {% endif %}
-{% if grafana_postgres_ssl_mode|default('disable') != 'disable' %}
+{% if grafana_postgres_ssl_mode != 'disable' %}
 {% if grafana_postgres_ca_cert_path != None %}
 ca_cert_path = {{ grafana_postgres_ca_cert_path }}
 {% else %}
 ;ca_cert_path =
 {% endif %}
 {% if grafana_postgres_client_key_path != None %}
-ca_cert_path = {{ grafana_postgres_client_key_path }}
+ca_key_path = {{ grafana_postgres_client_key_path }}
 {% else %}
 ;client_key_path =
 {% endif %}
 {% if grafana_postgres_client_cert_path != None %}
-ca_cert_path = {{ grafana_postgres_client_cert_path }}
+client_cert_path = {{ grafana_postgres_client_cert_path }}
 {% else %}
 ;client_cert_path =
 {% endif %}
 {% if grafana_postgres_client_cert_name != None %}
-ca_cert_path = {{ grafana_postgres_client_cert_name }}
+server_cert_name = {{ grafana_postgres_client_cert_name }}
 {% else %}
 ;server_cert_name =
 {% endif %}
+{% else %}
+;ssl_mode =
 {% endif %}
 
 # For "sqlite3" only, path relative to data_path setting
@@ -149,22 +138,22 @@ max_idle_conn = {{ grafana_database_max_idle_conn|default('2') }}
 max_open_conn = {{ grafana_database_max_open_conn|default('150') }}
 
 # Connection Max Lifetime default is 14400 (means 14400 seconds or 4 hours)
-;conn_max_lifetime = 14400
+conn_max_lifetime = {{ grafana_database_conn_max_lifetime|default('14400') }}
 
 # Set to true to log the sql calls and execution times.
-log_queries = true
+log_queries = {{ grafana_database_log_queries|default('false') }}
 
 # For "sqlite3" only. cache mode setting used for connecting to the database. (private, shared)
 {% if grafana_database_type == 'sqlite3'  %}
-{% if grafana_sqlite_cache_mode != None %}
 cache_mode = {{ grafana_sqlite_cache_mode|default('private') }}
-{% endif %}
+{% else %}
+;cache_mode =
 {% endif %}
 
 ################################### Data sources #########################
 [datasources]
 # Upper limit of data sources that Grafana will return. This limit is a temporary configuration and it will be deprecated when pagination will be introduced on the list data sources API.
-datasource_limit = 5000
+datasource_limit = {{ grafana_datasource_limit|default('5000') }}
 
 #################################### Remote Cache ####################################
 
