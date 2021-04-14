@@ -1,11 +1,10 @@
 ---
 - name: Install any necessary dependencies [Debian/Ubuntu]
   apt:
-    name: "{{ item }}"
+    name: "{{ grafana_prereq_pkgs }}"
     state: present
     update_cache: yes
     cache_valid_time: 3600
-  with_items: "{{ grafana_prereq_pkgs }}"
   when: not grafana_install_from_repo
 
 - name: Download Grafana package via URL [Debian/Ubuntu]
