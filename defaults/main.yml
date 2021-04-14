@@ -3,7 +3,7 @@ data_mount_root: "/data"
 
 grafana_install_from_repo: True
 grafana_install_release: stable
-grafana_install_verion: 5.4.2
+grafana_install_verion: 7.5.3
 grafana_template_configuration: True
 grafana_enable_auth_ldap: False
 grafana_enable_auth_google: False
@@ -14,6 +14,19 @@ grafana_enable_auth_grafana: False
 grafana_enable_auth_proxy: False
 grafana_enable_auth_anonymous: False
 grafana_data_dir: /var/lib/grafana
+grafana_database_host:
+grafana_database_type: sqlite3
+grafana_database_user:
+grafana_database_name: grafana
+grafana_database_user_password:
+grafana_database_full_url:
+grafana_postgres_ca_cert_path:
+grafana_postgres_client_key_path:
+grafana_postgres_client_cert_path:
+grafana_postgres_client_cert_name:
+grafana_sqlite_database_path:
+grafana_database_max_idle_conn: 2
+grafana_database_max_open_conn: 150
 grafana_configuration_dir: /etc/grafana
 grafana_http_protocol: http
 grafana_http_addr: 0.0.0.0
@@ -25,8 +38,11 @@ grafana_url: http://localhost:3000
 grafana_enable_backups: True
 grafana_backup_archive_dir: /data/backups/grafana
 grafana_backup_tmp_folder: "grafana_backup_${current_time}"
+grafana_remote_cache:
+grafana_cache_connstr:
 grafana_backup_tmp_dir: /opt/backups/grafana
-
+grafana_provider_config:
+grafana_session_provider:
 grafana_backup_tool_dir: /usr/local/src/grafana-backup-tool
 grafana_api_token:
 
