@@ -35,7 +35,7 @@ ssl_skip_verify = false
 {% if grafana_openldap_server_enable_ssl %}
 client_cert = "{{ grafana_openldap_ssl_certpath }}"
 client_key = "{{ grafana_openldap_ssl_keypath }}"
-
+{% endif %}
 # Search user bind dn
 bind_dn = "{{ grafana_openldap_server_bind_dn }}"
 # Search user bind password
@@ -53,28 +53,22 @@ search_base_dns = ["{{ grafana_openldap_server_dc }}"]
 group_search_filter = "{{ grafana_group_search_filter|default('(&(objectClass=posixGroup)(memberUid=%s))') }}"
 group_search_base_dns = ["{{ grafana_groups_ou }}"]
 
+{% for item in grafana_ldap_configurations %}
+
+{% if item.name == 'attributes' %}
 # Specify names of the ldap attributes your ldap uses
 [servers.attributes]
-name = "givenName"
-surname = "sn"
-username = "uid"
-member_of = "cn"
-email =  "mail"
-
+{% elif item.name == 'group_mappings' %}
 # Map ldap groups to grafana org roles
 [[servers.group_mappings]]
-group_dn = "admin"
-org_role = "Admin"
-# To make user an instance admin  (Grafana Admin) uncomment line below
-grafana_admin = true
-# The Grafana organization database id, optional, if left out the default org (id 1) will be used
-org_id = 1
+{% endif %}
+{% if item.options is defined %}
+{% for key, value in item.options.items() %}
+{{ key }} = "{{ value }}"
+{% endfor %}
+{% endif %}
 
-[[servers.group_mappings]]
-group_dn = "users"
-org_role = "Viewer"
 
-#[[servers.group_mappings]]
-# If you want to match all (or no ldap groups) then you can use wildcard
-#group_dn = "media"
-#org_role = "Viewer"
+{% endfor %}
+
+
