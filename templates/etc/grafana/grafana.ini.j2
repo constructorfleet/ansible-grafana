@@ -108,7 +108,7 @@ ca_cert_path = {{ grafana_postgres_ca_cert_path }}
 ;ca_cert_path =
 {% endif %}
 {% if grafana_postgres_client_key_path != None %}
-ca_key_path = {{ grafana_postgres_client_key_path }}
+client_key_path = {{ grafana_postgres_client_key_path }}
 {% else %}
 ;client_key_path =
 {% endif %}
@@ -549,7 +549,7 @@ enabled = false
 #################################### Grafana.com integration  ##########################
 # Url used to import dashboards directly from Grafana.com
 [grafana_com]
-;url = https://grafana.com
+url = https://grafana.com
 
 #################################### External image storage ##########################
 [external_image_storage]
