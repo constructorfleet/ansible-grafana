@@ -66,14 +66,39 @@ grafana_smtp_from_name:
 grafana_smtp_ehlo_identity:
 
 
-# OpenLDAP Variables (usually already defined in group_vars when using openldap role)
+# OpenLDAP Configuration
+grafana_openldap_server_ip:
+grafana_openldap_port: 389
+grafana_openldap_server_enable_ssl: False
+grafana_openldap_ssl_skip_verify: True
+grafana_openldap_search_filter: '(uid=%s)'
+grafana_group_search_filter: '(&(objectClass=posixGroup)(memberUid=%s))'
+grafana_groups_ou:
+grafana_openldap_ssl_keypath:
+grafana_openldap_ssl_certpath:
+grafana_openldap_server_bind_dn:
+grafana_openldap_server_dc:
+grafana_openldap_server_rootpw:
 
-openldap_server_ip:
-openldap_server_rootpw: "{{ vault_openldap_server_rootpw }}"
-openldap_server_enable_ssl: false
-
-grafana_enable_ssl: False
-ssl_certpath:
-ssl_keypath:
-ssl_privkey:
-ssl_certchain:
+grafana_ldap_configurations:
+  - name: attributes
+    options:
+      name: "givenName"
+      surname: "sn"
+      username: "uid"
+      member_of: "cn"
+      email: "mail"
+  - name: group_mappings
+    options:
+      group_dn: "admin"
+      org_role: "Admin"
+      grafana_admin: true
+      org_id: 1
+  - name: group_mappings
+    options:
+      group_dn: "users"
+      org_role: "Viewer"
+  - name: group_mappings
+    options:
+      group_dn: "media"
+      org_role: "Viewer"
