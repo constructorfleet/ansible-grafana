@@ -43,7 +43,7 @@ bind_dn = "{{ grafana_openldap_server_bind_dn }}"
 bind_password = "{{ grafana_openldap_server_rootpw }}"
 
 # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
-search_filter = {{ grafana_openldap_search_filter|default('(uid=%s)') }}
+search_filter = "{{ grafana_openldap_search_filter|default('(uid=%s)') }}"
 
 # An array of base dns to search through
 search_base_dns = ["{{ grafana_openldap_server_dc }}"]
@@ -54,7 +54,6 @@ group_search_filter = "{{ grafana_group_search_filter|default('(&(objectClass=po
 group_search_base_dns = ["{{ grafana_groups_ou }}"]
 
 {% for item in grafana_ldap_configurations %}
-
 {% if item.name == 'attributes' %}
 # Specify names of the ldap attributes your ldap uses
 [servers.attributes]
@@ -67,8 +66,6 @@ group_search_base_dns = ["{{ grafana_groups_ou }}"]
 {{ key }} = "{{ value }}"
 {% endfor %}
 {% endif %}
-
-
 {% endfor %}
 
 
