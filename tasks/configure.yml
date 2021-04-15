@@ -20,8 +20,6 @@
   notify: |
     {% if not grafana_containerized %}
     restart grafana-server
-    {% else %}
-    omit
     {% endif %}
   tags:
     - grafana-configfile
@@ -38,8 +36,6 @@
   notify: |
     {% if not grafana_containerized %}
     restart grafana-server
-    {% else %}
-    omit
     {% endif %}
   tags:
     - grafana-ldap
@@ -56,6 +52,7 @@
     - vonage-status-panel
     - grafana-worldmap-panel
     - petrslavotinek-carpetplot-panel
+    - natel-discrete-panel
   notify: restart grafana-server
   tags:
     - grafana-plugins
