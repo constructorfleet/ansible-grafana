@@ -11,9 +11,10 @@
     state: present
   tags:
     - grafana-backup
+
 - name: Install requirements for grafana backup tool
   pip:
-    executable: pip
+#    executable: pip
     name: requests
     state: present
   tags:
