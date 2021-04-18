@@ -17,10 +17,7 @@
     group: "{{ grafana_config_gid }}"
     mode: 0777
   when: grafana_template_configuration
-  notify: |
-    {% if not grafana_containerized %}
-    restart grafana-server
-    {% endif %}
+  notify: restart grafana-server
   tags:
     - grafana-configfile
 - name: Set Grafana LDAP configuration
@@ -33,10 +30,7 @@
     group: "{{ grafana_config_gid }}"
     mode: 0777
   when: grafana_enable_auth_ldap
-  notify: |
-    {% if not grafana_containerized %}
-    restart grafana-server
-    {% endif %}
+  notify: restart grafana-server
   tags:
     - grafana-ldap
 
