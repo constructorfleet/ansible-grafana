@@ -43,7 +43,7 @@ grafana_url: http://localhost:3000
 grafana_enable_backups: True
 grafana_backup_archive_dir: /data/backups/grafana
 grafana_backup_tmp_folder: "grafana_backup_${current_time}"
-grafana_remote_cache:
+grafana_remote_cache: database
 grafana_cache_connstr:
 grafana_backup_tmp_dir: /opt/backups/grafana
 grafana_provider_config:
@@ -79,7 +79,7 @@ grafana_openldap_ssl_certpath:
 grafana_openldap_server_bind_dn:
 grafana_openldap_server_dc:
 grafana_openldap_server_rootpw:
-
+grafana_openldap_allow_sign_up: True
 grafana_ldap_configurations:
   - name: attributes
     options:
