@@ -396,7 +396,7 @@ org_role = Viewer
 [auth.ldap]
 enabled = true
 config_file = {{ grafana_configuration_dir | default('/etc/grafana') }}/ldap.toml
-allow_sign_up = false
+allow_sign_up = {{ grafana_openldap_allow_sign_up | to_json }}
 {% endif %}
 
 #################################### SMTP / Emailing ##########################
