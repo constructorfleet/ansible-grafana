@@ -8,7 +8,7 @@
 host = "{{ grafana_openldap_server_ip }}"
 
 # Default port is 389 or 636 if use_ssl = true
-port = "{{ grafana_openldap_port }}"
+port = {{ grafana_openldap_port | to_json  }}
 
 # Set to true if ldap server supports TLS
 {% if grafana_openldap_server_enable_ssl %}
@@ -43,7 +43,7 @@ bind_dn = "{{ grafana_openldap_server_bind_dn }}"
 bind_password = "{{ grafana_openldap_server_rootpw }}"
 
 # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
-search_filter = {{ grafana_openldap_search_filter|default('(uid=%s)') }}
+search_filter = "{{ grafana_openldap_search_filter|default('(uid=%s)') }}"
 
 # An array of base dns to search through
 search_base_dns = ["{{ grafana_openldap_server_dc }}"]
@@ -64,7 +64,11 @@ group_search_base_dns = ["{{ grafana_groups_ou }}"]
 {% endif %}
 {% if item.options is defined %}
 {% for key, value in item.options.items() %}
+{% if value == "true" or value == "false" or value is number %}
+{{ key }} = {{ value | to_json }}
+{% else %}
 {{ key }} = "{{ value }}"
+{% endif %}
 {% endfor %}
 {% endif %}
 
