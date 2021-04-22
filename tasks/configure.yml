@@ -3,6 +3,9 @@
   file:
     path: "{{ grafana_configuration_dir }}"
     state: directory
+    mode: 0777
+    owner: "{{ grafana_config_uid }}"
+    group: "{{ grafana_config_gid }}"
   tags:
     - grafana-configfile
     - grafana-ldap
