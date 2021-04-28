@@ -338,7 +338,7 @@ viewers_can_edit = false
 enabled = true
 
 # specify organization name that should be used for unauthenticated users
-org_name = Guest
+org_name = {{ grafana_auth_anonymous_org_name|default('Guest') }}
 
 # specify role for unauthenticated users
 org_role = Viewer

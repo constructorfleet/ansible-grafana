@@ -6,6 +6,7 @@ grafana_allow_embedding: False
 grafana_auto_assign_org: True
 grafana_allow_org_create: False
 grafana_auto_assign_org_role: Viewer
+grafana_auth_anonymous_org_name: Guest
 grafana_allow_signup: False
 grafana_install_from_repo: True
 grafana_install_release: stable
