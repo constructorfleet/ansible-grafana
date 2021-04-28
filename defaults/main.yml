@@ -2,6 +2,11 @@
 data_mount_root: "/data"
 grafana_app_mode: production
 grafana_containerized: False
+grafana_allow_embedding: False
+grafana_auto_assign_org: True
+grafana_allow_org_create: False
+grafana_auto_assign_org_role: Viewer
+grafana_allow_signup: False
 grafana_install_from_repo: True
 grafana_install_release: stable
 grafana_install_verion: 7.5.3

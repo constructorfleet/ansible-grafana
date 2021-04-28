@@ -250,6 +250,12 @@ admin_password = admin
 # disable protection against brute force login attempts
 ;disable_brute_force_login_protection = false
 
+{% if grafana_allow_embedding|default(False) %}
+allow_embedding = true
+{% else %}
+allow_embedding = false
+{% endif %}
+
 #################################### Snapshots ###########################
 [snapshots]
 # snapshot sharing options
@@ -268,16 +274,34 @@ versions_to_keep = 50
 #################################### Users ###############################
 [users]
 # disable user signup / registration
+
+{% if grafana_allow_signup|default(False) %}
+allow_sign_up = true
+{% else %}
 allow_sign_up = false
+{% endif %}
 
 # Allow non admin users to create organizations
+
+{% if grafana_allow_org_create|default(False) %}
+allow_org_create = true
+{% else %}
 allow_org_create = false
+{% endif %}
 
 # Set to true to automatically assign new users to the default organization (id 1)
+{% if grafana_auto_assign_org|default(True) %}
 auto_assign_org = true
+{% else %}
+auto_assign_org = false
+{% endif %}
 
 # Default role new users will be automatically assigned (if disabled above is set to true)
+{% if grafana_auto_assign_org|default(True) %}
+auto_assign_org_role = {{ grafana_auto_assign_org_role|default('Viewer') }}
+{% else %}
 ;auto_assign_org_role = Viewer
+{% endif %}
 
 # Background text for the user field on the login page
 ;login_hint = email or username
