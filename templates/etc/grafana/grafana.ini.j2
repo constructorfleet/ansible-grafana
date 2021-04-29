@@ -228,21 +228,25 @@ session_life_time = 86400
 #################################### Security ####################################
 [security]
 # default admin user, created on startup
-admin_user = admin
+admin_user = {{ grafana_admin_user|default('admin') }}
 
 # default admin password, can be changed before first start of grafana,  or in profile settings
-admin_password = admin
+admin_password = {{ grafana_admin_password|default('admin') }}
 
 # used for signing
-;secret_key = SW2YcwTIb9zpOOhoPsMm
+{% if grafana_secret_signing_key != None %}
+secret_key = {{ grafana_secret_signing_key }}
+{% else %}
+;secret_key = {{ grafana_secret_signing_key|default('SW2YcwTIb9zpOOhoPsMm') }}
+{% endif %}
 
 # Auto-login remember days
-;login_remember_days = 7
-;cookie_username = grafana_user
-;cookie_remember_name = grafana_remember
+login_remember_days = 7
+cookie_username = grafana_user
+cookie_remember_name = grafana_remember
 
 # disable gravatar profile images
-;disable_gravatar = false
+disable_gravatar = false
 
 # data source proxy whitelist (ip_or_domain:port separated by spaces)
 ;data_source_proxy_whitelist =
