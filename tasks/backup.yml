@@ -14,7 +14,6 @@
 
 - name: Install requirements for grafana backup tool
   pip:
-#    executable: pip
     name: requests
     state: present
   tags:
@@ -41,8 +40,8 @@
     - grafana-backup-dir
 - name: Check out Grafana Backup Tool
   git:
-    repo: "https://github.com/constructorfleet/grafana-backup-tool.git"
-    version: master
+    repo: "{{ grafana_backup_utility_repo }}"
+    version: "{{ grafana_backup_utility_version }}"
     dest: "{{ grafana_backup_tool_dir }}"
     force: yes
   tags:
@@ -51,8 +50,8 @@
 
 - name: Update grafana backup script settings config from template
   template:
-    src: grafanaSettings.py.j2
-    dest: "{{ grafana_backup_tool_dir }}/grafanaSettings.py"
+    src: grafanaSettings.json.j2
+    dest: "{{ grafana_backup_config_file }}"
     force: yes
     backup: no
     owner: root
@@ -79,7 +78,7 @@
     minute: '0'
     hour: '0'
     user: root
-    job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh && find {{ grafana_backup_archive_dir }}/ -mtime +30 -exec rm -f {} \;'
+    job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh {{ grafana_backup_config_file }} && find {{ grafana_backup_archive_dir }}/ -mtime +30 -exec rm -f {} \;'
     cron_file: ansible-grafana_backup
   tags:
     - grafana-backup

@@ -1,7 +1,11 @@
 ---
 data_mount_root: "/data"
 grafana_app_mode: production
+grafana_admin_user: admin
+grafana_admin_password: admin
+grafana_secret_signing_key:
 grafana_containerized: False
+
 grafana_allow_embedding: False
 grafana_auto_assign_org: True
 grafana_allow_org_create: False
@@ -47,14 +51,21 @@ grafana_root_url:
 grafana_enable_gzip: True
 grafana_url: http://localhost:3000
 grafana_enable_backups: True
-grafana_backup_archive_dir: /data/backups/grafana
+grafana_backup_utility_repo: https://github.com/ysde/grafana-backup-tool.git
+grafana_backup_utility_version: 1.1.8
+grafana_backup_archive_dir: /opt/grafana_backups
+grafana_backup_debug: 'true'
+grafana_backup_prettyprint: 'true'
+grafana_backup_file_format: 'grafana_backup_%Y-%m-%d-%H-%M'
+grafana_backup_verify_ssl: 'false'
 grafana_backup_tmp_folder: "grafana_backup_${current_time}"
 grafana_remote_cache: database
 grafana_cache_connstr:
 grafana_backup_tmp_dir: /opt/backups/grafana
 grafana_provider_config:
 grafana_session_provider:
-grafana_backup_tool_dir: /usr/local/src/grafana-backup-tool
+grafana_backup_tool_dir: /usr/local/src/grafana-backup-tool/
+grafana_backup_config_file: "{{ grafana_backup_tool_dir }}/grafana_backup/conf/grafanaSettings.json"
 grafana_api_token:
 grafana_enable_ssl: False
 grafana_config_uid: 472
