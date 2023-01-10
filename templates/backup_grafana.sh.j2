@@ -14,4 +14,4 @@ if [[ ! -f "${settings_file}" ]]; then
 	exit 1
 fi
 
-{{ discovered_interpreter_python }} -m grafana_backup.cli save --config $settings_file
+{{ ansible_python_interpreter }} -m grafana_backup.cli save --config $settings_file

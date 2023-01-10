@@ -16,4 +16,4 @@ if [[ $# -ne 2 ]]; then
 	exit 1
 fi
 
-{{ discovered_interpreter_python }} -m grafana_backup.cli --config $settings_file restore $archive_file
+{{ ansible_python_interpreter }} -m grafana_backup.cli --config $settings_file restore $archive_file
