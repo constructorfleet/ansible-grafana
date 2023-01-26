@@ -73,6 +73,7 @@ grafana_backup_config_dir: "{{ grafana_backup_dir }}/configs"
 grafana_backup_config_file: "{{ grafana_backup_config_dir }}/grafanaSettings.json"
 grafana_backup_file_format: grafana_backup_%Y-%m-%d_%H:%M:%S
 grafana_backup_verify_ssl: "true"
+grafana_backup_prettyprint: "true"
 grafana_backup_debug: "true"
 grafana_url: http://localhost:3000
 grafana_api_token: "{{ prompt_grafana_api_key|default('') }}"

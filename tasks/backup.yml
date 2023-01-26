@@ -55,7 +55,7 @@
     minute: '0'
     hour: '0'
     user: root
-    job: 'grafana-backup save --config {{ grafana_backup_config_file }} && find {{ grafana_backup_archive_dir }}/ -mtime +30 -exec rm -f {} \;'
+    job: 'grafana-backup save --config {{ grafana_backup_config_file }} && find {{ grafana_backup_archive_dir }}/ -mtime +30 -exec rm -rf {} \;'
     cron_file: ansible-grafana_backup
   tags:
     - grafana-backup
