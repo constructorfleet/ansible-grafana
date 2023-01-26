@@ -10,7 +10,7 @@
     "url": "{{ grafana_url }}",
     "token": "{{ grafana_api_token }}",
     "search_api_limit": {{ grafana_datasource_limit|int }},
-    "default_password": "000000",
+    "default_password": "{{ grafana_default_password }}",
     "admin_account": "{{ grafana_admin_user }}",
     "admin_password": "{{ grafana_admin_password }}"
   }
