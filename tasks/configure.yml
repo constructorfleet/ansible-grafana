@@ -6,7 +6,6 @@
     mode: 0777
     owner: "{{ grafana_config_uid }}"
     group: "{{ grafana_config_gid }}"
-    recurse: true
   tags:
     - grafana-configfile
     - grafana-ldap
@@ -19,12 +18,11 @@
     backup: yes
     owner: "{{ grafana_config_uid }}"
     group: "{{ grafana_config_gid }}"
-    mode: 0755
+    mode: 0777
   when: grafana_template_configuration
   notify: restart grafana-server
   tags:
     - grafana-configfile
-
 - name: Set Grafana LDAP configuration
   template:
     src: etc/grafana/ldap.toml.j2
@@ -33,30 +31,16 @@
     backup: yes
     owner: "{{ grafana_config_uid }}"
     group: "{{ grafana_config_gid }}"
-    mode: 0755
+    mode: 0777
   when: grafana_enable_auth_ldap
   notify: restart grafana-server
   tags:
     - grafana-ldap
 
-- name: Set grafana data directory
-  file:
-    path: "{{ grafana_data_dir }}"
-    state: directory
-    mode: 0755
-    owner: "{{ grafana_config_uid }}"
-    group: "{{ grafana_config_gid }}"
-    recurse: true
-  tags:
-    - grafana-datafile
-  notify: restart grafana-server
-
-
 - name: Install grafana plugins
   grafana_plugin:
     name: "{{ item }}"
     state: present
-    recurse: true
   with_items:
     - briangann-gauge-panel
     - grafana-polystat-panel
