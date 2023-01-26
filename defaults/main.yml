@@ -1,8 +1,6 @@
 ---
 data_mount_root: "/data"
 grafana_app_mode: production
-grafana_admin_user: admin
-grafana_admin_password: admin
 grafana_secret_signing_key:
 grafana_containerized: False
 
@@ -41,7 +39,6 @@ grafana_postgres_client_cert_name:
 grafana_sqlite_database_path:
 grafana_database_max_idle_conn: 2
 grafana_database_max_open_conn: 150
-grafana_datasource_limit: 5000
 grafana_configuration_dir: /etc/grafana
 grafana_http_protocol: http
 grafana_http_addr: 0.0.0.0
@@ -49,24 +46,11 @@ grafana_http_port: 3000
 grafana_domain:
 grafana_root_url:
 grafana_enable_gzip: True
-grafana_url: http://localhost:3000
-grafana_enable_backups: True
-grafana_backup_utility_repo: https://github.com/ysde/grafana-backup-tool.git
-grafana_backup_utility_version: 1.1.8
-grafana_backup_archive_dir: /opt/grafana_backups
-grafana_backup_debug: 'true'
-grafana_backup_prettyprint: 'true'
-grafana_backup_file_format: 'grafana_backup_%Y-%m-%d-%H-%M'
-grafana_backup_verify_ssl: 'false'
-grafana_backup_tmp_folder: "grafana_backup_${current_time}"
+
 grafana_remote_cache: database
 grafana_cache_connstr:
-grafana_backup_tmp_dir: /opt/backups/grafana
 grafana_provider_config:
 grafana_session_provider:
-grafana_backup_tool_dir: /usr/local/src/grafana-backup-tool/
-grafana_backup_config_file: "{{ grafana_backup_tool_dir }}/grafana_backup/conf/grafanaSettings.json"
-grafana_api_token:
 grafana_enable_ssl: False
 grafana_config_uid: 472
 grafana_config_gid: 472
@@ -81,8 +65,21 @@ grafana_smtp_skip_verify: False
 grafana_smtp_from_address:
 grafana_smtp_from_name:
 grafana_smtp_ehlo_identity:
-
-
+### Grafana Dashboard/API 
+grafana_enable_backups: True
+grafana_backup_dir: /opt/grafana_backup
+grafana_backup_archive_dir: "{{ grafana_backup_dir }}/archives"
+grafana_backup_config_dir: "{{ grafana_backup_dir }}/configs"
+grafana_backup_config_file: "{{ grafana_backup_config_dir }}/grafanaSettings.json"
+grafana_backup_file_format: grafana_backup_%Y-%m-%d_%H:%M:%S
+grafana_backup_verify_ssl: "true"
+grafana_backup_debug: "true"
+grafana_url: http://localhost:3000
+grafana_api_token: "{{ prompt_grafana_api_key|default('') }}"
+grafana_datasource_limit: 5000
+grafana_default_password: "{{ vault_grafana_default_password|default('admin') }}"
+grafana_admin_user: admin
+grafana_admin_password: "{{ vault_grafana_admin_password|default('admin') }}"
 # OpenLDAP Configuration
 grafana_openldap_server_ip:
 grafana_openldap_port: 389
