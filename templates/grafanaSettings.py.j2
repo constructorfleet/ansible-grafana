@@ -1,9 +1,0 @@
-import os
-
-grafana_url = os.getenv('GRAFANA_URL', '{{ grafana_url | default('http://localhost:3000') }}')
-token = os.getenv('GRAFANA_TOKEN', '{{ grafana_api_token | default('') }}')
-http_get_headers = {'Authorization': 'Bearer ' + token}
-http_post_headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
-search_api_limit = {{ grafana_datasource_limit|default('5000') }}
-debug = {{ grafana_backup_debug|default('False') }}
-verifySSL = {{ grafana_enable_ssl|default('False') }}
