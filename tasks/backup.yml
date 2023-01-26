@@ -48,25 +48,14 @@
   tags:
     - grafana-backup-settings
     - grafana-backup
-- name: Update grafana backup script from template
-  template:
-    src: backup_grafana.sh.j2
-    dest: "{{ grafana_backup_tool_dir }}/backup_grafana.sh"
-    force: yes
-    backup: no
-    owner: root
-    group: root
-    mode: 0755
-  tags:
-    - grafana-backup
-    - grafana-backup-script
+
 - name: Creates Grafana backup Cron job
   cron:
     name: "grafana create backup"
     minute: '0'
     hour: '0'
     user: root
-    job: '{{ grafana_backup_tool_dir }}/backup_grafana.sh {{ grafana_backup_config_file }} && find {{ grafana_backup_archive_dir }}/ -mtime +30 -exec rm -f {} \;'
+    job: 'grafana-backup save --config {{ grafana_backup_config_file }} && find {{ grafana_backup_archive_dir }}/ -mtime +30 -exec rm -f {} \;'
     cron_file: ansible-grafana_backup
   tags:
     - grafana-backup
