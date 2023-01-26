@@ -5,6 +5,7 @@
     state: present
   tags:
     - grafana-backup
+
 - name: Ensure Crond is installed
   package:
     name: cron
@@ -14,39 +15,26 @@
 
 - name: Install requirements for grafana backup tool
   pip:
-    name: requests
+    name:
+      - requests
+      - grafana-backup
     state: present
   tags:
     - grafana-backup
-- name: Create backup data tmp directory
+
+- name: Create backup data archive and config directories
   file:
-    path: "{{ grafana_backup_tmp_dir }}"
+    path: "{{ item }}"
     state: directory
     owner: root
     group: root
     mode: 0755
+  loop:
+    - "{{ grafana_backup_archive_dir }}"
+    - "{{ grafana_backup_config_dir }}"
   tags:
     - grafana-backup
     - grafana-backup-dir
-- name: Create backup data archive directory
-  file:
-    path: "{{ grafana_backup_archive_dir }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-  tags:
-    - grafana-backup
-    - grafana-backup-dir
-- name: Check out Grafana Backup Tool
-  git:
-    repo: "{{ grafana_backup_utility_repo }}"
-    version: "{{ grafana_backup_utility_version }}"
-    dest: "{{ grafana_backup_tool_dir }}"
-    force: yes
-  tags:
-    - grafana-backup
-    - grafana-backup-repo
 
 - name: Update grafana backup script settings config from template
   template:
